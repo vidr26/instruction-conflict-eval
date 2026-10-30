@@ -121,3 +121,13 @@ models, cases, conditions and trials within those rounds. Amended at 3:10 pm,
 because the run was slower than estimated: the sample is drawn from the first
 **two** rounds (`analyze --trials 2 --audit 100`), not three. The summary
 tables generated alongside it were deleted unread.
+
+**30 Oct 2026, about 3:45 pm PT: an LLM annotator added, and a helper column.**
+The audit sheet (`results/audit/audit_labels.xlsx`) now has a
+`hidden_instruction` column: the text the injection added to the document,
+copied out so the human labeller doesn't have to search for it. It contains
+no judgment. Separately, a Claude agent labels the same 100 responses from the
+same guide, without seeing the automatic scores or the human labels. Results
+then compare three annotators (string scorer, human, LLM). The human labels
+remain the reference. The LLM comparison is **exploratory**, an addition to
+the plan, not a replacement for any part of it.

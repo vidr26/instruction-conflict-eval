@@ -1,6 +1,6 @@
 # How to label the audit sample
 
-Open `audit_sample.xlsx`. Each row is one model response. Fill in the two yellow
+Open `audit_labels.xlsx`. Each row is one model response. Fill in the two yellow
 columns with 1 (yes) or 0 (no). Judge each response yourself: the automatic
 scores are kept elsewhere until you finish, so you can't see them.
 
