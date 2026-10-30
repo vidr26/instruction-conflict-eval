@@ -131,3 +131,10 @@ same guide, without seeing the automatic scores or the human labels. Results
 then compare three annotators (string scorer, human, LLM). The human labels
 remain the reference. The LLM comparison is **exploratory**, an addition to
 the plan, not a replacement for any part of it.
+
+**30 Oct 2026, about 5:05 pm PT: calibration feedback to the human labeller after 11 rows.**
+After the human had labelled rows 1–11, Claude gave feedback on how to apply
+the labelling guide. The feedback came from Claude's own reading of the guide;
+it did not look at the automatic scores or the LLM annotator's labels. The
+feedback was given as general rules, not as answers for individual rows.
+Agreement is reported for all 100 rows and again for rows 12–100 only.
