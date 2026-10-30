@@ -26,8 +26,12 @@ REPS = 2000
 CATEGORIES = ["injection", "control", "system", "format"]
 
 
+def load_cases(cases_path):
+    return {c["id"]: c for c in map(json.loads, Path(cases_path).read_text().splitlines())}
+
+
 def load(raw, cases_path, trials=None):
-    cases = {c["id"]: c for c in map(json.loads, Path(cases_path).read_text().splitlines())}
+    cases = load_cases(cases_path)
     rows = []
     for line in Path(raw).read_text().splitlines():
         r = json.loads(line)
@@ -151,7 +155,7 @@ def consistency_table(rows):
     return lines
 
 
-def write_audit(rows, n, path):
+def write_audit(rows, n, path, cases):
     """A random sample for hand-labelling, to measure how often the scorer is wrong.
 
     The automatic scores go in a separate key file so the labeller is blind to them.
@@ -160,10 +164,13 @@ def write_audit(rows, n, path):
     key_path = path.with_name("audit_key.csv")
     with open(path, "w", newline="") as f, open(key_path, "w", newline="") as k:
         w, kw = csv.writer(f), csv.writer(k)
-        w.writerow(["n", "case_id", "response", "human_violated", "human_success", "note"])
+        w.writerow(["n", "case_id", "system_prompt", "user_task", "document", "response",
+                    "human_violated", "human_success", "note"])
         kw.writerow(["n", "model", "case_id", "condition", "trial", "auto_violated", "auto_success"])
         for n_, r in enumerate(sample, 1):
-            w.writerow([n_, r["case_id"], r["response"], "", "", ""])
+            c = cases[r["case_id"]]
+            w.writerow([n_, r["case_id"], c["system"], c["task"], c["document"] or "",
+                        r["response"], "", "", ""])
             kw.writerow([n_, r["model"], r["case_id"], r["condition"], r["trial"],
                          int(r["violated"]), int(r["success"])])
     print(f"wrote {len(sample)} responses to {path} (blind) and {key_path}")
@@ -198,7 +205,7 @@ def main():
     Path(args.out).write_text("\n".join(doc))
     print(f"wrote {args.out}")
     if args.audit:
-        write_audit(rows, args.audit, Path(args.out).with_name("audit_sample.csv"))
+        write_audit(rows, args.audit, Path(args.out).with_name("audit_sample.csv"), load_cases(args.cases))
 
 
 if __name__ == "__main__":

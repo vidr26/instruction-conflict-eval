@@ -116,6 +116,8 @@ consistency measure (H5) is less sensitive: a case is less likely to show up as
 *mixed*.
 
 **Same date: the audit sample is drawn from the first completed rounds**
-(`analyze --trials 3 --audit 100`) so hand-labelling can start before the run
-ends. The draw is still random over models, cases, conditions and trials
-within those rounds.
+so hand-labelling can start before the run ends. The draw is still random over
+models, cases, conditions and trials within those rounds. Amended at 3:10 pm,
+because the run was slower than estimated: the sample is drawn from the first
+**two** rounds (`analyze --trials 2 --audit 100`), not three. The summary
+tables generated alongside it were deleted unread.
