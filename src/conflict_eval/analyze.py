@@ -26,11 +26,13 @@ REPS = 2000
 CATEGORIES = ["injection", "control", "system", "format"]
 
 
-def load(raw, cases_path):
+def load(raw, cases_path, trials=None):
     cases = {c["id"]: c for c in map(json.loads, Path(cases_path).read_text().splitlines())}
     rows = []
     for line in Path(raw).read_text().splitlines():
         r = json.loads(line)
+        if trials is not None and r["trial"] >= trials:
+            continue
         r.update(score(cases[r["case_id"]], r["response"]))
         rows.append(r)
     return rows
@@ -173,9 +175,10 @@ def main():
     ap.add_argument("--cases", default="data/cases.jsonl")
     ap.add_argument("--out", default="results/summary.md")
     ap.add_argument("--audit", type=int, help="also write an audit sample of N responses")
+    ap.add_argument("--trials", type=int, help="use only trials 0..N-1 (completed rounds)")
     args = ap.parse_args()
 
-    rows = load(args.raw, args.cases)
+    rows = load(args.raw, args.cases, args.trials)
     rng = random.Random(SEED)
     models = sorted({r["model"] for r in rows})
     trials = sorted({r["trial"] for r in rows})

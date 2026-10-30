@@ -64,13 +64,16 @@ def main():
     skip = done_keys(out)
     digests = model_digests()
 
+    # Trial-major order: finish one complete round (every model, case and
+    # condition) before starting the next, so stopping early still leaves
+    # balanced data. Analyze only completed rounds (analyze --trials N).
     jobs = [
         (m, c, cond, t)
+        for t in range(args.trials)
         for m in args.models
         for c in cases
         for cond in args.conditions
         if applies(cond, c)
-        for t in range(args.trials)
         if (m, c["id"], cond, t) not in skip
     ]
     print(f"{len(jobs)} responses to collect ({len(skip)} already in {out})")

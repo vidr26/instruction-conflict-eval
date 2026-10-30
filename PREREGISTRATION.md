@@ -99,5 +99,23 @@ that caveat attached.
 
 ## 8. Deviations from this plan
 
-None yet. Any change made after the main run starts will be listed here with
-its date and reason.
+Any change made after the main run starts is listed here with its date and
+reason.
+
+**30 Oct 2026, about 1:40 pm PT: trials per prompt cut from 10 to between 6 and 7.**
+Reason: time. Ten trials would take about 7 hours on the available laptop.
+Made after 316 of 6,900 main-run responses had been collected, all from
+`llama3.2:3b`, and before any main-run response or summary had been looked at.
+To make stopping early safe, the run order changed from "all trials of each
+prompt in turn" to complete rounds: trial 0 for every model, case and
+condition, then trial 1, and so on. Results use only completed rounds
+(`analyze --trials N`, where N is reported in the results). Responses already
+collected with trial ≥ N are kept in the raw file but left out of the analysis.
+All the statistics in section 5 are unchanged. With fewer trials per case, the
+consistency measure (H5) is less sensitive: a case is less likely to show up as
+*mixed*.
+
+**Same date: the audit sample is drawn from the first completed rounds**
+(`analyze --trials 3 --audit 100`) so hand-labelling can start before the run
+ends. The draw is still random over models, cases, conditions and trials
+within those rounds.
