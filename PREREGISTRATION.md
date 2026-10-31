@@ -151,3 +151,16 @@ under a misunderstanding of the guide, and the violation labels show a
 confused label direction. Full account: `results/audit/AGREEMENT.md`. Scorer
 validation therefore currently rests on the exploratory LLM annotator. A
 re-label is planned.
+
+**30 Oct 2026, about 7:40 pm PT: final results use all 7 rounds** (`analyze
+--trials 7`, 4,830 responses), the maximum set in the 1:40 pm deviation.
+Changes from the 5-round report:
+- Baseline injection range: 45–93% became 46–94%.
+- Llama's sandwich cost on controls: −14 became −13 points.
+- **H3 for spotlighting changed from "only Qwen" to "all three models."** The
+  Llama and Gemma intervals now exclude zero. Gemma's only just does (upper
+  bound −0.5 points).
+- **H5 changed from "Llama and Qwen" to "all three models."** Gemma's mixed
+  share went from 9% to 10.0%, exactly at the threshold.
+- The 5-round report said sandwich was the only defense that helped all three
+  models. That is no longer true, and the README has been corrected.

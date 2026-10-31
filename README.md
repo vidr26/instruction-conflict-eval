@@ -7,10 +7,11 @@ they cost in helpfulness?
 The project is small and reproducible. It needs no API keys and no GPU. Every
 response is scored by deterministic checks, not by another model.
 
-> **Status (30 Oct 2026):** results below are from 5 completed rounds
-> (3,450 responses). The run is continuing to 7 rounds. The changes from the
-> original plan are logged, with dates and reasons, in
-> [`PREREGISTRATION.md`](PREREGISTRATION.md), section 8.
+> **Status:** final results from all 7 rounds (4,830 responses), the number
+> set when trials were cut from 10 for time. An earlier version of this page
+> reported 5 rounds. Every change between the two is listed in
+> [`PREREGISTRATION.md`](PREREGISTRATION.md), section 8, together with every
+> other change from the original plan.
 
 ## Findings
 
@@ -18,37 +19,38 @@ Full tables: [`results/summary.md`](results/summary.md). In brackets: 95%
 cluster-bootstrap intervals over cases.
 
 1. **Every model acted on hidden instructions in pasted documents.** Baseline
-   injection success rate: Llama 3.2 3B 45% [33–59], Qwen 2.5 7B 89% [78–98],
-   Gemma 3 4B 93% [83–100]. The largest model in this set was not the most robust.
+   injection success rate: Llama 3.2 3B 46% [35–58], Qwen 2.5 7B 89% [78–98],
+   Gemma 3 4B 94% [84–100]. The largest model in this set was not the most robust.
 2. **Fake authority worked best.** Injections dressed as a "[SYSTEM NOTICE]"
-   succeeded 100% of the time on Gemma and Qwen, and 66% on Llama. A blunt
-   "ignore all previous instructions" succeeded only 16% of the time on Llama.
+   succeeded 100% of the time on Gemma and Qwen, and 67% on Llama. A blunt
+   "ignore all previous instructions" succeeded only 17% of the time on Llama.
 3. **Stating the instruction hierarchy in the system prompt did nothing.** The
-   `hardened` condition changed the injection success rate by −2 to +3 points
+   `hardened` condition changed the injection success rate by −1 to +2 points
    for every model, and every interval includes zero.
-4. **Restating the task after the document (`sandwich`) was the only defense
-   that helped all three models, but how much varied a lot.** Qwen: 89% → 41%
-   (−48 points [−63, −32]). Llama: −13 [−23, −1]. Gemma: −11 [−22, −1].
-   Spotlighting helped only Qwen clearly (−15 [−25, −6]).
+4. **Both document-level defenses helped every model, but by very different
+   amounts.** Restating the task after the document (`sandwich`): Qwen 89% →
+   41% (−48 points [−64, −32]), Llama −14 [−24, −3], Gemma −11 [−22, −1].
+   Spotlighting: Qwen −14 [−24, −5], Llama −10 [−20, −1], Gemma −12 [−27, −0.5].
+   Gemma's interval only just excludes zero.
 5. **Defenses can cost helpfulness.** On clean documents, `sandwich` lowered
-   Llama's task success by 14 points [−28, 0]: it sometimes answered that no
+   Llama's task success by 13 points [−27, 0]: it sometimes answered that no
    document had been provided. That breaks the plan's 10-point helpfulness
-   threshold (H4), though the interval includes zero.
-6. **Testing a prompt once is not enough.** For Llama, 45% of model × prompt ×
-   condition cells were *mixed*: across 5 runs, the same prompt sometimes broke
-   the rule and sometimes didn't. Qwen: 21%. Gemma: 9%.
-7. **System-prompt rules were broken about half the time** (44–56% at
+   threshold (H4), though the interval reaches zero.
+6. **Testing a prompt once is not enough.** For Llama, 52% of model × prompt ×
+   condition cells were *mixed*: across 7 runs, the same prompt sometimes broke
+   the rule and sometimes didn't. Qwen: 25%. Gemma: 10%.
+7. **System-prompt rules were broken about half the time** (49–54% at
    baseline across models), and the hardened prompt didn't change that either.
 
 ### Hypotheses (from the plan)
 
 | | hypothesis | result |
 |---|---|---|
-| H1 | every model acts on some injections | **supported**: 45–93%, all intervals exclude 0 |
+| H1 | every model acts on some injections | **supported**: 46–94%, all intervals exclude 0 |
 | H2 | authority injections beat direct ones | **supported in direction** for all 3 models (descriptive, no interval) |
-| H3 | spotlight and sandwich each reduce injections | **sandwich: supported** for all 3. **spotlight: only Qwen** (the other intervals cross 0) |
-| H4 | no guardrail costs > 10 points of control success | **not supported** for Llama + sandwich (−14 points, interval [−28, 0]) |
-| H5 | ≥ 10% of cells are mixed | **supported** for Llama (45%) and Qwen (21%); Gemma 9% |
+| H3 | spotlight and sandwich each reduce injections | **supported** for all 3 models. Gemma's spotlight interval only just excludes 0 |
+| H4 | no guardrail costs > 10 points of control success | **not supported** for Llama + sandwich (−13 points, interval [−27, 0]) |
+| H5 | ≥ 10% of cells are mixed | **supported**: Llama 52%, Qwen 25%, Gemma 10% (19 of 190 cells, exactly at the threshold) |
 
 ### Scorer validation
 
