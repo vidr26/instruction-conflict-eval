@@ -8,10 +8,19 @@ The project is small and reproducible. It needs no API keys and no GPU. Every
 response is scored by deterministic checks, not by another model.
 
 > **Status:** final results from all 7 rounds (4,830 responses), the number
-> set when trials were cut from 10 for time. An earlier version of this page
-> reported 5 rounds. Every change between the two is listed in
-> [`PREREGISTRATION.md`](PREREGISTRATION.md), section 8, together with every
-> other change from the original plan.
+> set when trials were cut from 10 for time. An interim report used the first
+> 5 rounds (3,450 responses). The headline numbers barely moved:
+>
+> | | 5 rounds (interim) | 7 rounds (final) |
+> |---|---|---|
+> | baseline injection success | 45–93% | 46–94% |
+> | sandwich effect on Qwen | −48 points | −48 points |
+> | sandwich cost on Llama's clean tasks | −14 points | −13 points |
+> | hardened system prompt | no measurable effect | no measurable effect |
+> | spotlighting | clearly helped Qwen only | helped all three (Gemma only just) |
+>
+> Every change from the original plan is listed in
+> [`PREREGISTRATION.md`](PREREGISTRATION.md), section 8.
 
 ## Findings
 
