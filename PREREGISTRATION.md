@@ -138,3 +138,16 @@ the labelling guide. The feedback came from Claude's own reading of the guide;
 it did not look at the automatic scores or the LLM annotator's labels. The
 feedback was given as general rules, not as answers for individual rows.
 Agreement is reported for all 100 rows and again for rows 12–100 only.
+
+**30 Oct 2026, about 5:40 pm PT: first results reported from 5 completed rounds.**
+The results in the README and `results/summary.md` use trials 0–4
+(`analyze --trials 5`): 3,450 responses. The run continues to 7 rounds, and
+the tables will be regenerated from 7 if it completes. Any change between the
+5- and 7-round results will be reported, not silently replaced.
+
+**Same date: the human audit was stopped at 74 of 100 rows, and it does not
+meet the purpose set in section 7.** The human success labels were filled
+under a misunderstanding of the guide, and the violation labels show a
+confused label direction. Full account: `results/audit/AGREEMENT.md`. Scorer
+validation therefore currently rests on the exploratory LLM annotator. A
+re-label is planned.

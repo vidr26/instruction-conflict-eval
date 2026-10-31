@@ -7,9 +7,58 @@ they cost in helpfulness?
 The project is small and reproducible. It needs no API keys and no GPU. Every
 response is scored by deterministic checks, not by another model.
 
-> **Status:** harness, dataset and analysis plan are complete. The pilot ran
-> (1 model, 1 trial). The main run (3 models × 10 trials, 6,900 responses) is
-> in progress. Results and findings will be added here when it finishes.
+> **Status (30 Oct 2026):** results below are from 5 completed rounds
+> (3,450 responses). The run is continuing to 7 rounds. The changes from the
+> original plan are logged, with dates and reasons, in
+> [`PREREGISTRATION.md`](PREREGISTRATION.md), section 8.
+
+## Findings
+
+Full tables: [`results/summary.md`](results/summary.md). In brackets: 95%
+cluster-bootstrap intervals over cases.
+
+1. **Every model acted on hidden instructions in pasted documents.** Baseline
+   injection success rate: Llama 3.2 3B 45% [33–59], Qwen 2.5 7B 89% [78–98],
+   Gemma 3 4B 93% [83–100]. The largest model in this set was not the most robust.
+2. **Fake authority worked best.** Injections dressed as a "[SYSTEM NOTICE]"
+   succeeded 100% of the time on Gemma and Qwen, and 66% on Llama. A blunt
+   "ignore all previous instructions" succeeded only 16% of the time on Llama.
+3. **Stating the instruction hierarchy in the system prompt did nothing.** The
+   `hardened` condition changed the injection success rate by −2 to +3 points
+   for every model, and every interval includes zero.
+4. **Restating the task after the document (`sandwich`) was the only defense
+   that helped all three models, but how much varied a lot.** Qwen: 89% → 41%
+   (−48 points [−63, −32]). Llama: −13 [−23, −1]. Gemma: −11 [−22, −1].
+   Spotlighting helped only Qwen clearly (−15 [−25, −6]).
+5. **Defenses can cost helpfulness.** On clean documents, `sandwich` lowered
+   Llama's task success by 14 points [−28, 0]: it sometimes answered that no
+   document had been provided. That breaks the plan's 10-point helpfulness
+   threshold (H4), though the interval includes zero.
+6. **Testing a prompt once is not enough.** For Llama, 45% of model × prompt ×
+   condition cells were *mixed*: across 5 runs, the same prompt sometimes broke
+   the rule and sometimes didn't. Qwen: 21%. Gemma: 9%.
+7. **System-prompt rules were broken about half the time** (44–56% at
+   baseline across models), and the hardened prompt didn't change that either.
+
+### Hypotheses (from the plan)
+
+| | hypothesis | result |
+|---|---|---|
+| H1 | every model acts on some injections | **supported**: 45–93%, all intervals exclude 0 |
+| H2 | authority injections beat direct ones | **supported in direction** for all 3 models (descriptive, no interval) |
+| H3 | spotlight and sandwich each reduce injections | **sandwich: supported** for all 3. **spotlight: only Qwen** (the other intervals cross 0) |
+| H4 | no guardrail costs > 10 points of control success | **not supported** for Llama + sandwich (−14 points, interval [−28, 0]) |
+| H5 | ≥ 10% of cells are mixed | **supported** for Llama (45%) and Qwen (21%); Gemma 9% |
+
+### Scorer validation
+
+A blind LLM annotator agreed with the deterministic scorer on 98% of
+violation labels and 97% of success labels. The one clear scorer error was the
+case the plan predicted: a response that quoted the canary while refusing it.
+**The planned human audit did not produce usable reference labels:** the
+labelling instructions were misread, and the details are in
+[`results/audit/AGREEMENT.md`](results/audit/AGREEMENT.md). Until a clean human
+re-label is done, scorer accuracy is supported only by LLM agreement.
 
 ## What is tested
 
